@@ -1,0 +1,37 @@
+# Entornos Virtuales
+.env
+.venv/
+venv/
+env/
+ENV/
+
+# Compilados de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Herramientas de Desarrollo y Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Entornos de Ejecución (Logs y bases de datos locales)
+*.log
+*.sqlite3
+*.db
+
+# Directorios de Build o Distribución
+build/
+dist/
+*.egg-info/
+
+# Configuraciones y carpetas del Sistema Operativo
+.DS_Store
+Thumbs.db
+
+# Editores y IDEs
+.vscode/
+.idea/
+*.swp

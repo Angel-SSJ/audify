@@ -1,0 +1,17 @@
+[project]
+name = "mongo-spotify"
+version = "0.1.0"
+authors = [
+    {name = "Angel", email = "angelgabriel.16ra@gmail.com"}
+]
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+keywords = ["fastapi", "mongodb", "spotify"]
+license = {file = "LICENSE"}
+
+dependencies = []
+
+
+[tool.fastapi]
+entrypoint='app.controllers.api:app'
