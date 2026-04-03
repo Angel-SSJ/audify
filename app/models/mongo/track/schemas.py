@@ -1,0 +1,19 @@
+from datetime import datetime
+from pydantic import Field, BaseModel
+from app.core.validators.object_id import ObjectID
+from app.models.mongo.artist.schemas import ArtistEmbeddedList
+
+class TrackEmbeddedPlaylist(BaseModel):
+    track_id:ObjectID
+    title: str = ''
+    artist_name:str = ''
+    duration_sec: int = 0
+    cover_image: str = ''
+    added_at: datetime = Field(default_factory=datetime.now)
+
+class TrackEmbeddedAlbum(BaseModel):
+    track_number: int = 0
+    track_id:ObjectID
+    title: str = ''
+    duration_sec: int = 0
+    artists: ArtistEmbeddedList = Field(default_factory=list)
