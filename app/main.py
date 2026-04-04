@@ -1,18 +1,23 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from motor.motor_asyncio import AsyncIOMotorClient
-from app.db.mongodb.mongo import db
-from app.core.config import settings
-from app.controllers import api_router
+
+from infrastructure.persistence.mongodb.mongo import db, get_mongo_db
+from app.config import settings
+from api.v1 import api_router
+
 
 @asynccontextmanager
-async def lifespan(app:FastAPI):
-
+async def lifespan(app: FastAPI):
     db.client = AsyncIOMotorClient(settings.mongo_connection)
     yield
     db.client.close()
 
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(
+    title="Spotify API",
+    version="1.0.0",
+    lifespan=lifespan,
+)
 
-app.include_router(api_router,prefix="/api")
+app.include_router(api_router, prefix="/api")

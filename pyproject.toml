@@ -10,8 +10,17 @@ requires-python = ">=3.14"
 keywords = ["fastapi", "mongodb", "spotify"]
 license = {file = "LICENSE"}
 
-dependencies = []
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "motor",
+    "pydantic[email]",
+    "sqlalchemy",
+    "asyncpg"
+]
 
+[tool.pytest.ini_options]
+pythonpath = ["."]
 
 [tool.fastapi]
-entrypoint='app.controllers.api:app'
+entrypoint = "app.main:app"
