@@ -1,26 +1,22 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List
 
-from domain.entities.track import TrackEntity
 from application.services.tracks import TracksService
-from infrastructure.persistence.mongodb.repositories.tracks import TrackRepository
-from api.dependencies.track_dependency import get_track_repository
+from api.dependencies.track_dependency import get_tracks_service
+from app.helpers.query_params import QueryParams
+from api.dtos.tracks import CreateTrackDTO, UpdateTrackDTO, TrackResponse
+from typing import Optional
 
 router = APIRouter(prefix="/tracks", tags=["tracks"])
 
 
-def get_tracks_service(
-    repo: TrackRepository = Depends(get_track_repository),
-) -> TracksService:
-    return TracksService(repo)
+
+@router.post("/find/", response_model=List[TrackResponse])
+async def get_tracks(service: TracksService = Depends(get_tracks_service), params: QueryParams = None):
+    return await service.find(params=params)
 
 
-@router.get("/", response_model=List[TrackEntity])
-async def list_tracks(service: TracksService = Depends(get_tracks_service)):
-    return await service.find(params=None)
-
-
-@router.get("/{track_id}", response_model=TrackEntity)
+@router.get("/{track_id}", response_model=TrackResponse)
 async def get_track(track_id: str, service: TracksService = Depends(get_tracks_service)):
     track = await service.get_by_id(track_id)
     if not track:
@@ -28,15 +24,15 @@ async def get_track(track_id: str, service: TracksService = Depends(get_tracks_s
     return track
 
 
-@router.post("/", response_model=TrackEntity, status_code=status.HTTP_201_CREATED)
-async def create_track(track: TrackEntity, service: TracksService = Depends(get_tracks_service)):
+@router.post("/", response_model=TrackResponse, status_code=status.HTTP_201_CREATED)
+async def create_track(track: CreateTrackDTO, service: TracksService = Depends(get_tracks_service)):
     return await service.create(track)
 
 
-@router.put("/{track_id}", response_model=TrackEntity)
+@router.put("/{track_id}", response_model=TrackResponse)
 async def update_track(
     track_id: str,
-    track: TrackEntity,
+    track: Optional[UpdateTrackDTO],
     service: TracksService = Depends(get_tracks_service),
 ):
     updated = await service.update(track_id, track)

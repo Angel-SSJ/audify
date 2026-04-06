@@ -1,26 +1,20 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from typing import List
-
-from domain.entities.album import AlbumEntity
+from typing import List, Optional
 from application.services.albums import AlbumsService
-from infrastructure.persistence.mongodb.repositories.albums import AlbumsRepository
-from api.dependencies.album_dependency import get_album_repository
+from api.dtos.albums import CreateAlbumDTO, UpdateAlbumDTO, AlbumResponse
+from app.helpers.query_params import QueryParams
+from api.dependencies.album_dependency import get_albums_service
+
 
 router = APIRouter(prefix="/albums", tags=["albums"])
 
 
-def get_albums_service(
-    repo: AlbumsRepository = Depends(get_album_repository),
-) -> AlbumsService:
-    return AlbumsService(repo)
+@router.post("/find/", response_model=List[AlbumResponse])
+async def get_albums(service: AlbumsService = Depends(get_albums_service), params: QueryParams = None):
+    return await service.find(params=params)
 
 
-@router.get("/", response_model=List[AlbumEntity])
-async def list_albums(service: AlbumsService = Depends(get_albums_service)):
-    return await service.find(params=None)
-
-
-@router.get("/{album_id}", response_model=AlbumEntity)
+@router.get("/{album_id}", response_model=AlbumResponse)
 async def get_album(album_id: str, service: AlbumsService = Depends(get_albums_service)):
     album = await service.get_by_id(album_id)
     if not album:
@@ -28,15 +22,15 @@ async def get_album(album_id: str, service: AlbumsService = Depends(get_albums_s
     return album
 
 
-@router.post("/", response_model=AlbumEntity, status_code=status.HTTP_201_CREATED)
-async def create_album(album: AlbumEntity, service: AlbumsService = Depends(get_albums_service)):
+@router.post("/", response_model=AlbumResponse, status_code=status.HTTP_201_CREATED)
+async def create_album(album: CreateAlbumDTO, service: AlbumsService = Depends(get_albums_service)):
     return await service.create(album)
 
 
-@router.put("/{album_id}", response_model=AlbumEntity)
+@router.put("/{album_id}", response_model=AlbumResponse)
 async def update_album(
     album_id: str,
-    album: AlbumEntity,
+    album: Optional[UpdateAlbumDTO],
     service: AlbumsService = Depends(get_albums_service),
 ):
     updated = await service.update(album_id, album)

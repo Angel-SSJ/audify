@@ -2,8 +2,8 @@ from infrastructure.persistence.mongodb.models.abstractions.base import BaseMode
 from app.validators.object_id import ObjectID
 from infrastructure.persistence.mongodb.models.artist.schemas import (
     Aliases,
-    MusicalGenre
 )
+from infrastructure.persistence.mongodb.models.enums import MusicalGenre
 from infrastructure.persistence.mongodb.models.metrics.schemas import MetricsArtist
 from infrastructure.persistence.mongodb.models.media.schemas import ImagesProfileArtist
 from infrastructure.persistence.mongodb.models.social.schemas import SocialLinksArtist

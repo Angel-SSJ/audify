@@ -10,14 +10,19 @@ class AlbumMapper(IMapper[AlbumEntity, Album]):
         return AlbumEntity(
             id=str(persistence_model.id),
             title=persistence_model.title,
-            artist_id=persistence_model.artist_id,
+            artist_id=str(persistence_model.artist_id),
             artist_name=persistence_model.artist_name,
-            release_type=persistence_model.release_type,
+            release_type=persistence_model.release_type.value if persistence_model.release_type else None,
             release_date=persistence_model.release_date,
-            genres=persistence_model.genres,
+            genres=[genre.value for genre in persistence_model.genres] if persistence_model.genres else [],
             total_tracks=persistence_model.total_tracks,
             cover_url=persistence_model.cover_url,
-            tracks=persistence_model.tracks,
+            tracks=[
+                {
+                    **track.model_dump(),
+                    "track_id": str(track.track_id)
+                } for track in persistence_model.tracks
+            ] if persistence_model.tracks else [],
         )
 
     @staticmethod
@@ -25,4 +30,8 @@ class AlbumMapper(IMapper[AlbumEntity, Album]):
         data = domain_entity.model_dump(exclude={"id"})
         if domain_entity.id:
             data["_id"] = ObjectID(domain_entity.id)
+            
+        if domain_entity.artist_id:
+            data["artist_id"] = ObjectID(domain_entity.artist_id)
+            
         return data

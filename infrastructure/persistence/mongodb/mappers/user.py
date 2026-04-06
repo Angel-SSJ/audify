@@ -12,7 +12,7 @@ class UserMapper(IMapper[UserEntity, User]):
             last_name=persistence_model.last_name,
             user_name=persistence_model.user_name,
             email=persistence_model.email,
-            account_type=persistence_model.account_type,
+            account_type=persistence_model.account_type.value if persistence_model.account_type else None,
             settings=persistence_model.settings.model_dump() if persistence_model.settings else None,
             is_active=persistence_model.is_active
         )

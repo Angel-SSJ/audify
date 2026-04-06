@@ -1,10 +1,9 @@
 from datetime import datetime
 from pydantic import Field, BaseModel
-from app.validators.object_id import ObjectID
 from domain.object_values.artist_embeddings import ArtistEmbeddedList
 
 class TrackEmbeddedPlaylist(BaseModel):
-    track_id:ObjectID
+    track_id: str
     title: str = ''
     artist_name:str = ''
     duration_sec: int = 0
@@ -13,7 +12,7 @@ class TrackEmbeddedPlaylist(BaseModel):
 
 class TrackEmbeddedAlbum(BaseModel):
     track_number: int = 0
-    track_id:ObjectID
+    track_id: str
     title: str = ''
     duration_sec: int = 0
     artists: list[str] = Field(default_factory=list)

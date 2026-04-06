@@ -1,5 +1,5 @@
 [project]
-name = "mongo-spotify"
+name = "audify"
 version = "0.1.0"
 authors = [
     {name = "Angel", email = "angelgabriel.16ra@gmail.com"}
@@ -7,7 +7,7 @@ authors = [
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.14"
-keywords = ["fastapi", "mongodb", "spotify"]
+keywords = ["fastapi", "mongodb", "audify"]
 license = {file = "LICENSE"}
 
 dependencies = [

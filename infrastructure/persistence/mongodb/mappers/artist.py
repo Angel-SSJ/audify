@@ -10,13 +10,13 @@ class ArtistMapper(IMapper[ArtistEntity, Artist]):
             id=str(persistence_model.id),
             name=persistence_model.name,
             bio=persistence_model.bio,
-            image_url=persistence_model.image_url,
-            followers_count=persistence_model.followers_count,
-            monthly_listeners=persistence_model.monthly_listeners,
-            top_tracks=persistence_model.top_tracks,
-            albums=persistence_model.albums,
-            related_artists=persistence_model.related_artists,
-            country_code=persistence_model.country_code
+            verified=persistence_model.verified,
+            country_code=persistence_model.country_code,
+            aliases=persistence_model.aliases,
+            genres=[genre.value for genre in persistence_model.genres] if persistence_model.genres else [],
+            images=persistence_model.images.model_dump() if persistence_model.images else None,
+            metrics=persistence_model.metrics.model_dump() if persistence_model.metrics else None,
+            social_links=persistence_model.social_links.model_dump() if persistence_model.social_links else None,
         )
 
     @staticmethod

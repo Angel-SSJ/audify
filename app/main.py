@@ -4,7 +4,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 from infrastructure.persistence.mongodb.mongo import db, get_mongo_db
 from app.config import settings
-from api.v1 import api_router
+from api.controllers import api_router
 
 
 @asynccontextmanager
@@ -15,7 +15,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="Spotify API",
+    title="Audify API",
     version="1.0.0",
     lifespan=lifespan,
 )

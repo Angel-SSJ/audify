@@ -1,26 +1,20 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List
 
-from domain.entities.user import UserEntity
 from application.services.users import UsersService
-from infrastructure.persistence.mongodb.repositories.users import UserRepository
-from api.dependencies.user_dependency import get_user_repository
+from api.dependencies.user_dependency import get_users_service
+from api.dtos.users import CreateUserDTO, UpdateUserDTO, UserResponse
+from app.helpers.query_params import QueryParams
 
 router = APIRouter(prefix="/users", tags=["users"])
 
 
-def get_users_service(
-    repo: UserRepository = Depends(get_user_repository),
-) -> UsersService:
-    return UsersService(repo)
+@router.post("/find/", response_model=List[UserResponse])
+async def get_users(service: UsersService = Depends(get_users_service), params: QueryParams = None):
+    return await service.find(params=params)
 
 
-@router.get("/", response_model=List[UserEntity])
-async def list_users(service: UsersService = Depends(get_users_service)):
-    return await service.find(params=None)
-
-
-@router.get("/{user_id}", response_model=UserEntity)
+@router.get("/{user_id}", response_model=UserResponse)
 async def get_user(user_id: str, service: UsersService = Depends(get_users_service)):
     user = await service.get_by_id(user_id)
     if not user:
@@ -28,15 +22,15 @@ async def get_user(user_id: str, service: UsersService = Depends(get_users_servi
     return user
 
 
-@router.post("/", response_model=UserEntity, status_code=status.HTTP_201_CREATED)
-async def create_user(user: UserEntity, service: UsersService = Depends(get_users_service)):
+@router.post("/", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
+async def create_user(user: CreateUserDTO, service: UsersService = Depends(get_users_service)):
     return await service.create(user)
 
 
-@router.put("/{user_id}", response_model=UserEntity)
+@router.put("/{user_id}", response_model=UserResponse)
 async def update_user(
     user_id: str,
-    user: UserEntity,
+    user: UpdateUserDTO,
     service: UsersService = Depends(get_users_service),
 ):
     updated = await service.update(user_id, user)

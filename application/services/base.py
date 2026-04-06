@@ -25,4 +25,3 @@ class BaseService(ABC, Generic[R, E]):
 
     async def delete(self, id: str) -> bool:
         return await self.repository.delete(id)
-

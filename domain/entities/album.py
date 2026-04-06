@@ -1,13 +1,12 @@
-from domain.abstractions.base import BaseEntity
 from domain.object_values.track_embeddings import TrackEmbeddedAlbum
-from app.validators.object_id import ObjectID
 from pydantic import Field
 from datetime import datetime
 from domain.abstractions.enums import MusicalGenre, ReleaseType
+from domain.abstractions.base import BaseEntity
 
 class AlbumEntity(BaseEntity):
     title: str
-    artist_id: ObjectID
+    artist_id: str
     artist_name: str
     release_type: ReleaseType
     release_date: datetime

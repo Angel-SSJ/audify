@@ -1,26 +1,21 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from typing import List
-
-from domain.entities.playlist import PlaylistEntity
+from typing import List, Optional
 from application.services.playlists import PlaylistsService
-from infrastructure.persistence.mongodb.repositories.playlists import PlaylistRepository
-from api.dependencies.playlist_dependency import get_playlist_repository
+from app.helpers.query_params import QueryParams
+from api.dtos.playlist import CreatePlaylistDTO, UpdatePlaylistDTO, PlaylistResponse
+from api.dependencies.playlist_dependency import get_playlists_service
+
 
 router = APIRouter(prefix="/playlists", tags=["playlists"])
 
 
-def get_playlists_service(
-    repo: PlaylistRepository = Depends(get_playlist_repository),
-) -> PlaylistsService:
-    return PlaylistsService(repo)
+
+@router.post("/find/", response_model=List[PlaylistResponse])
+async def get_playlists(service: PlaylistsService = Depends(get_playlists_service), params: QueryParams = None):
+    return await service.find(params=params)
 
 
-@router.get("/", response_model=List[PlaylistEntity])
-async def list_playlists(service: PlaylistsService = Depends(get_playlists_service)):
-    return await service.find(params=None)
-
-
-@router.get("/{playlist_id}", response_model=PlaylistEntity)
+@router.get("/{playlist_id}", response_model=PlaylistResponse)
 async def get_playlist(playlist_id: str, service: PlaylistsService = Depends(get_playlists_service)):
     playlist = await service.get_by_id(playlist_id)
     if not playlist:
@@ -28,15 +23,15 @@ async def get_playlist(playlist_id: str, service: PlaylistsService = Depends(get
     return playlist
 
 
-@router.post("/", response_model=PlaylistEntity, status_code=status.HTTP_201_CREATED)
-async def create_playlist(playlist: PlaylistEntity, service: PlaylistsService = Depends(get_playlists_service)):
+@router.post("/", response_model=PlaylistResponse, status_code=status.HTTP_201_CREATED)
+async def create_playlist(playlist: CreatePlaylistDTO, service: PlaylistsService = Depends(get_playlists_service)):
     return await service.create(playlist)
 
 
-@router.put("/{playlist_id}", response_model=PlaylistEntity)
+@router.put("/{playlist_id}", response_model=PlaylistResponse)
 async def update_playlist(
     playlist_id: str,
-    playlist: PlaylistEntity,
+    playlist: Optional[UpdatePlaylistDTO],
     service: PlaylistsService = Depends(get_playlists_service),
 ):
     updated = await service.update(playlist_id, playlist)

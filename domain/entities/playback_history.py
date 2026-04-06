@@ -1,5 +1,4 @@
 from domain.abstractions.base import BaseEntity
-from app.validators.object_id import ObjectID
 from pydantic import Field
 from datetime import datetime
 from domain.object_values.playback_interactions import PlaybackInteractions

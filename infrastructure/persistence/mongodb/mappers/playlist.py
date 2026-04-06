@@ -9,22 +9,20 @@ class PlaylistMapper(IMapper[PlaylistEntity, Playlist]):
     def to_domain(persistence_model: Playlist) -> PlaylistEntity:
         return PlaylistEntity(
             id=str(persistence_model.id),
-            name=persistence_model.name,
-            description=persistence_model.description,
-            owner_id=persistence_model.owner_id,
-            is_public=persistence_model.is_public,
-            followers_count=persistence_model.followers_count,
-            cover_image=persistence_model.cover_image,
-            tracks=[TrackEmbeddedPlaylist(
-                track_id=str(track.track_id),
-                title=track.title,
-                duration_sec=track.duration_sec,
-                cover_image=track.cover_image,
-                added_at=track.added_at,
-                artist_name=track.artist_name,
-            ) for track in persistence_model.tracks],
-            total_duration_sec=persistence_model.total_duration_sec,
-            total_tracks=persistence_model.total_tracks
+            name=persistence_model.name or '',
+            description=persistence_model.description or '',
+            owner_id=str(persistence_model.owner_id),
+            is_public=persistence_model.is_public if persistence_model.is_public is not None else True,
+            followers_count=persistence_model.followers_count or 0,
+            cover_image=persistence_model.cover_image or '',
+            tracks=[
+                {
+                    **track.model_dump(),
+                    "track_id": str(track.track_id)
+                } for track in persistence_model.tracks
+            ] if persistence_model.tracks else [],
+            total_duration_sec=persistence_model.total_duration_sec or 0,
+            total_tracks=persistence_model.total_tracks or 0
         )
 
     @staticmethod
@@ -32,4 +30,8 @@ class PlaylistMapper(IMapper[PlaylistEntity, Playlist]):
         data = domain_entity.model_dump(exclude={"id"})
         if domain_entity.id:
             data["_id"] = ObjectID(domain_entity.id)
+            
+        if domain_entity.owner_id:
+            data["owner_id"] = ObjectID(domain_entity.owner_id)
+            
         return data

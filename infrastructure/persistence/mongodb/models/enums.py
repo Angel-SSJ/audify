@@ -31,9 +31,16 @@ class MusicalGenre(str, Enum):
     ranchera = "ranchera"
     regional_mexicano = "regional mexicano"
     trap_argentino = "trap argentino"
-    classical = "classical"
-    electronic = "electronic"
+    classical = "clásica"
+    electronic = "electrónica"
     hip_hop = "hip hop"
+    rap_under = "rap under"
+    drill = "drill"
+    urbano = "urbano"
+    rap = "rap"
+    cumbia_420 = "cumbia 420"
+    trap_rioplatense = "trap rioplatense"
+    rkt = "rkt"
 
 class VideoStreamingQualityResolution(str, Enum):
     ultra_high = '1080p'

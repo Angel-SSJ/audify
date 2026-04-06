@@ -11,6 +11,11 @@ class TrackEmbeddedPlaylist(BaseModel):
     cover_image: str = ''
     added_at: datetime = Field(default_factory=datetime.now)
 
+class ArtistEmbeddedTrack(BaseModel):
+    artist_id: ObjectID
+    name: str = ""
+    role: str = ""
+
 class TrackEmbeddedAlbum(BaseModel):
     track_number: int = 0
     track_id: ObjectID
