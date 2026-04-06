@@ -15,7 +15,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="Audify API",
+    title="Audify",
     version="1.0.0",
     lifespan=lifespan,
 )

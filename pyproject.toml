@@ -1,5 +1,5 @@
 [project]
-name = "audify"
+name = "Audify"
 version = "0.1.0"
 authors = [
     {name = "Angel", email = "angelgabriel.16ra@gmail.com"}
