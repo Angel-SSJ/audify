@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from app.validators.object_id import ObjectID
+from api.helpers.object_id import ObjectID
 from infrastructure.persistence.mongodb.models.enums import PlaybackContextType
 
 class PlaybackInteractions(BaseModel):

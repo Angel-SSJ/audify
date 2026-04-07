@@ -15,7 +15,24 @@ class Settings(BaseSettings):
     postgres_base_connection_string: str
     app_name: str
     debug: bool
+    access_token_expire_minutes: int
+    access_token_expire_hours: int
+    access_token_expire_days: int
+    jwt_algorithm: str
+    secret_key: str
+
+
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
+
+    @property
+    def jwt_secret(self)->int:
+        hours:int = self.access_token_expire_hours
+        days:int = self.access_token_expire_days
+        minutes:int = self.access_token_expire_minutes
+
+        total_in_minutes: int = minutes * hours * days
+
+        return total_in_minutes
 
     @property
     def mongo_connection(self)->str:
@@ -35,13 +52,13 @@ class Settings(BaseSettings):
         password = urllib.parse.quote_plus(self.postgres_password)
         host = self.postgres_host
         port = self.postgres_port
-        db = self.postgres_name
+        db = self.postgres_db
         return self.postgres_base_connection_string.format(
             USER=user,
             PASSWORD=password,
             HOST=host,
             PORT=port,
-            DB=db
+            NAME=db
         )
 
 settings = Settings()

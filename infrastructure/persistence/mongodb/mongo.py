@@ -1,5 +1,5 @@
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
-from app.config import settings
+from api.config import settings
 
 
 class MongoDB:
@@ -11,4 +11,3 @@ db = MongoDB()
 
 async def get_mongo_db() -> AsyncIOMotorDatabase:
     return db.client[settings.mongo_db]
-

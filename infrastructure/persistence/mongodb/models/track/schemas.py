@@ -1,6 +1,6 @@
 from datetime import datetime
 from pydantic import Field, BaseModel
-from app.validators.object_id import ObjectID
+from api.helpers.object_id import ObjectID
 from infrastructure.persistence.mongodb.models.artist.schemas import ArtistEmbeddedList
 
 class TrackEmbeddedPlaylist(BaseModel):

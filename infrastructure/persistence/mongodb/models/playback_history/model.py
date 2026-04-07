@@ -1,6 +1,6 @@
 from datetime import datetime
 from infrastructure.persistence.mongodb.models.abstractions.base import BaseModelMongo
-from app.validators.object_id import ObjectID
+from api.helpers.object_id import ObjectID
 from infrastructure.persistence.mongodb.models.playback_history.schemas import (
     PlaybackDevice,
     PlaybackContext,

@@ -4,7 +4,7 @@ from infrastructure.persistence.mongodb.models.abstractions.base import BaseMode
 from infrastructure.persistence.mongodb.models.artist.schemas import RecentlyPlayed
 from infrastructure.persistence.mongodb.models.device.schemas import LinkedDevice
 from infrastructure.persistence.mongodb.models.user.schemas import Settings
-from app.validators.object_id import ObjectID
+from api.helpers.object_id import ObjectID
 from infrastructure.persistence.mongodb.models.enums import AccountType
 
 class User(BaseModelMongo[ObjectID]):

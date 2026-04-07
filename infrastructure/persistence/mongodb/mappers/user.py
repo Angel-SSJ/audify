@@ -1,7 +1,7 @@
 from domain.entities.user import UserEntity
 from infrastructure.persistence.mongodb.models.user.model import User
 from domain.interfaces.mapper import IMapper
-from app.validators.object_id import ObjectID
+from api.helpers.object_id import ObjectID
 
 class UserMapper(IMapper[UserEntity, User]):
     @staticmethod

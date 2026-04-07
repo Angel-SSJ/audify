@@ -3,7 +3,7 @@ from typing import List
 
 from application.services.tracks import TracksService
 from api.dependencies.track_dependency import get_tracks_service
-from app.helpers.query_params import QueryParams
+from api.helpers.query_params import QueryParams
 from api.dtos.tracks import CreateTrackDTO, UpdateTrackDTO, TrackResponse
 from typing import Optional
 

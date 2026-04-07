@@ -1,7 +1,7 @@
 from domain.entities.artist import ArtistEntity
 from infrastructure.persistence.mongodb.models.artist.model import Artist
 from domain.interfaces.mapper import IMapper
-from app.validators.object_id import ObjectID
+from api.helpers.object_id import ObjectID
 
 class ArtistMapper(IMapper[ArtistEntity, Artist]):
     @staticmethod

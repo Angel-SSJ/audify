@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List, Optional
 from application.services.playlists import PlaylistsService
-from app.helpers.query_params import QueryParams
+from api.helpers.query_params import QueryParams
 from api.dtos.playlist import CreatePlaylistDTO, UpdatePlaylistDTO, PlaylistResponse
 from api.dependencies.playlist_dependency import get_playlists_service
 

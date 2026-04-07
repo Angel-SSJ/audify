@@ -1,7 +1,7 @@
 from domain.entities.playlist import PlaylistEntity
 from infrastructure.persistence.mongodb.models.playlist.model import Playlist
 from domain.interfaces.mapper import IMapper
-from app.validators.object_id import ObjectID
+from api.helpers.object_id import ObjectID
 from infrastructure.persistence.mongodb.models.track.schemas import TrackEmbeddedPlaylist
 
 class PlaylistMapper(IMapper[PlaylistEntity, Playlist]):

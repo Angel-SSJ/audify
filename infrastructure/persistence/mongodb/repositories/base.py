@@ -6,8 +6,8 @@ from motor.motor_asyncio import AsyncIOMotorDatabase
 
 from domain.interfaces.repositories import IBaseRepository
 from domain.interfaces.mapper import IMapper
-from app.validators.object_id import ObjectID
-from app.helpers.query_params import QueryParams, FieldFilter, SortOrder
+from api.helpers.object_id import ObjectID
+from api.helpers.query_params import QueryParams, FieldFilter, SortOrder
 
 D = TypeVar("D", bound=BaseModel)
 P = TypeVar("P", bound=BaseModel)
@@ -60,49 +60,64 @@ class BaseRepositoryMongo(ABC, Generic[D, P]):
         return self.mapper.to_domain(self.schema_class(**doc))
 
     async def get_by_id(self, id: str) -> Optional[D]:
-        doc = await self.collection.find_one({"_id": ObjectID(id)})
-        return self._to_entity(doc) if doc else None
+        try:
+            doc = await self.collection.find_one({"_id": ObjectID(id)})
+            return self._to_entity(doc) if doc else None
+        except Exception as e:
+            raise NotFoundException(f"{self.entity_name} not found")
 
     async def find(self, params: QueryParams) -> List[D]:
-        if params is None:
-            params = QueryParams()
-        query = self._build_mongo_filters(params.filters)
-        sort = self._build_sort(params.sort_by, params.sort_order)
-        cursor = self.collection.find(query)
-        if sort:
-            cursor = cursor.sort(sort)
-        cursor = cursor.skip(params.offset).limit(params.limit)
-        docs = await cursor.to_list(length=params.limit)
-        return [self._to_entity(doc) for doc in docs]
+        try:
+            if params is None:
+                params = QueryParams()
+            query = self._build_mongo_filters(params.filters)
+            sort = self._build_sort(params.sort_by, params.sort_order)
+            cursor = self.collection.find(query)
+            if sort:
+                cursor = cursor.sort(sort)
+            cursor = cursor.skip(params.offset).limit(params.limit)
+            docs = await cursor.to_list(length=params.limit)
+            return [self._to_entity(doc) for doc in docs]
+        except Exception as e:
+            raise NotFoundException(f"{self.entity_name} not found")
 
     async def create(self, entity: D) -> D:
-        data = self.mapper.to_persistence(entity)
-        data["created_at"] = datetime.utcnow()
-        data["updated_at"] = datetime.utcnow()
-        data["is_active"] = True
-        result = await self.collection.insert_one(data)
-        doc = await self.collection.find_one({"_id": result.inserted_id})
-        return self._to_entity(doc)
+        try:
+            data = self.mapper.to_persistence(entity)
+            data["created_at"] = datetime.utcnow()
+            data["updated_at"] = datetime.utcnow()
+            data["is_active"] = True
+            result = await self.collection.insert_one(data)
+            doc = await self.collection.find_one({"_id": result.inserted_id})
+            return self._to_entity(doc)
+        except Exception as e:
+            raise DomainException(str(e))
 
     async def update(self, id: str, entity: Optional[D]) -> Optional[D]:
-        data = self.mapper.to_persistence(entity)
-        data.pop("_id", None)
-        data["updated_at"] = datetime.utcnow()
-        result = await self.collection.find_one_and_update(
-            {"_id": ObjectID(id)},
-            {"$set": data},
-            return_document=True,
-        )
-        return self._to_entity(result) if result else None
+        try:
+            data = self.mapper.to_persistence(entity)
+            data.pop("_id", None)
+            data["updated_at"] = datetime.utcnow()
+            result = await self.collection.find_one_and_update(
+                {"_id": ObjectID(id)},
+                {"$set": data},
+                return_document=True,
+            )
+            return self._to_entity(result) if result else None
+        except Exception as e:
+            raise DomainException(str(e))
 
     async def delete(self, id: str) -> bool:
-        data = {
-            "is_active": False,
-            "updated_at": datetime.utcnow(),
-            "deleted_at": datetime.utcnow()
-        }
-        result = await self.collection.update_one(
-            {"_id": ObjectID(id)},
-            {"$set": data},
-        )
-        return result.modified_count > 0
+        try:
+            data = {
+                "is_active": False,
+                "updated_at": datetime.utcnow(),
+                "deleted_at": datetime.utcnow()
+            }
+            result = await self.collection.update_one(
+                {"_id": ObjectID(id)},
+                {"$set": data},
+            )
+            return result.modified_count > 0
+        except Exception as e:
+            raise DomainException(str(e))

@@ -15,12 +15,15 @@ dependencies = [
     "uvicorn[standard]",
     "motor",
     "pydantic[email]",
+    "pydantic-settings",
     "sqlalchemy",
-    "asyncpg"
+    "asyncpg",
+    "pyjwt",
+    "python-dotenv"
 ]
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
 
 [tool.fastapi]
-entrypoint = "app.main:app"
+entrypoint = "api.main:app"

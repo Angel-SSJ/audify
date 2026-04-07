@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List, Optional
 from application.services.playback_history import PlaybackHistoryService
-from app.helpers.query_params import QueryParams
+from api.helpers.query_params import QueryParams
 from api.dtos.playback_history import CreatePlaybackHistoryDTO, UpdatePlaybackHistoryDTO, PlaybackHistoryResponse
 from api.dependencies.playback_history_dependency import get_playback_histories_service
 

@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List, Optional
 from application.services.albums import AlbumsService
 from api.dtos.albums import CreateAlbumDTO, UpdateAlbumDTO, AlbumResponse
-from app.helpers.query_params import QueryParams
+from api.helpers.query_params import QueryParams
 from api.dependencies.album_dependency import get_albums_service
 
 

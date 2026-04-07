@@ -9,5 +9,6 @@ class UserEntity(BaseEntity):
     last_name: str= Field(default="")
     user_name: str= Field(default="")
     email: EmailStr
+    hashed_password: Optional[str] = None
     account_type: AccountType
     settings: Optional[Settings] = None

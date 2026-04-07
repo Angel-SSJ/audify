@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
-from app.config import settings
+from api.config import settings
 
 engine = create_async_engine(settings.postgres_connection, echo=True, future=True)
 

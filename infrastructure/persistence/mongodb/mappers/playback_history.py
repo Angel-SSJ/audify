@@ -1,7 +1,7 @@
 from domain.entities.playback_history import PlaybackHistoryEntity
 from infrastructure.persistence.mongodb.models.playback_history.model import PlaybackHistory
 from domain.interfaces.mapper import IMapper
-from app.validators.object_id import ObjectID
+from api.helpers.object_id import ObjectID
 
 class PlaybackHistoryMapper(IMapper[PlaybackHistoryEntity, PlaybackHistory]):
     @staticmethod

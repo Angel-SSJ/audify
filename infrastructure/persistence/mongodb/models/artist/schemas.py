@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from app.validators.object_id import ObjectID
+from api.helpers.object_id import ObjectID
 from infrastructure.persistence.mongodb.models.enums import ArtistRole
 
 class ArtistTrack(BaseModel):

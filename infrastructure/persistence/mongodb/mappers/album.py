@@ -1,7 +1,7 @@
 from domain.entities.album import AlbumEntity
 from infrastructure.persistence.mongodb.models.album.model import Album
 from domain.interfaces.mapper import IMapper
-from app.validators.object_id import ObjectID
+from api.helpers.object_id import ObjectID
 
 
 class AlbumMapper(IMapper[AlbumEntity, Album]):

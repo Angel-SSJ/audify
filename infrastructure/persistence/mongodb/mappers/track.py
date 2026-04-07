@@ -1,7 +1,7 @@
 from domain.entities.track import TrackEntity
 from infrastructure.persistence.mongodb.models.track.model import Track
 from domain.interfaces.mapper import IMapper
-from app.validators.object_id import ObjectID
+from api.helpers.object_id import ObjectID
 from domain.object_values.artist_embedded_track import ArtistEmbeddedTrack
 from infrastructure.persistence.mongodb.models.enums import ArtistRole
 

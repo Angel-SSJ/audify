@@ -2,7 +2,7 @@ from datetime import datetime
 from pydantic import Field
 from infrastructure.persistence.mongodb.models.abstractions.base import BaseModelMongo
 from infrastructure.persistence.mongodb.models.enums import ReleaseType, MusicalGenre
-from app.validators.object_id import ObjectID
+from api.helpers.object_id import ObjectID
 from infrastructure.persistence.mongodb.models.track.schemas import TrackEmbeddedAlbum
 
 class Album(BaseModelMongo[ObjectID]):

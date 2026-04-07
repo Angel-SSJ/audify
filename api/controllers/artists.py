@@ -1,6 +1,6 @@
 from typing import List, Optional
 from application.services.artists import ArtistsService
-from app.helpers.query_params import QueryParams
+from api.helpers.query_params import QueryParams
 from api.dtos.artists import CreateArtistDTO, UpdateArtistDTO, ArtistResponse
 from api.dependencies.artist_dependency import get_artists_service
 from fastapi import APIRouter, Depends, HTTPException, status
