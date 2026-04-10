@@ -6,18 +6,27 @@ from domain.object_values.images_profile_artists import ImagesProfileArtist
 
 class CreateArtistDTO(BaseModel):
     name: str
-    biography: str
+    bio: str
     image_url: str
     genres: list[MusicalGenre] = Field(default_factory=list)
     country: str
+    verified: bool = False
+    aliases: list[str] = Field(default_factory=list)
+    images: ImagesProfileArtist | None = None
+    metrics: MetricsArtist | None = None
+    social_links: SocialLinksArtist | None = None
 
 
 class UpdateArtistDTO(BaseModel):
     name: str | None = None
-    biography: str | None = None
-    image_url: str | None = None
+    bio: str | None = None
+    verified: bool | None = None
+    country_code: str | None = None
+    aliases: list[str] | None = None
     genres: list[MusicalGenre] | None = None
-    country: str | None = None
+    images: ImagesProfileArtist | None = None
+    metrics: MetricsArtist | None = None
+    social_links: SocialLinksArtist | None = None
 
 
 

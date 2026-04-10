@@ -1,5 +1,8 @@
 from pydantic import BaseModel
 from datetime import datetime
+from domain.object_values.playback_interactions import PlaybackInteractions
+from domain.object_values.playback_context import PlaybackContext
+from domain.object_values.playback_device import PlaybackDevice
 
 class CreatePlaybackHistoryDTO(BaseModel):
     user_id: str
@@ -9,6 +12,9 @@ class CreatePlaybackHistoryDTO(BaseModel):
     track_duration_ms: int = 0
     percent_played: float = 0.0
     country_code: str
+    interactions: PlaybackInteractions | None = None
+    context: PlaybackContext | None = None
+    device: PlaybackDevice | None = None
 
 
 class UpdatePlaybackHistoryDTO(BaseModel):
@@ -19,6 +25,10 @@ class UpdatePlaybackHistoryDTO(BaseModel):
     track_duration_ms: int | None = None
     percent_played: float | None = None
     country_code: str | None = None
+    interactions: PlaybackInteractions | None = None
+    context: PlaybackContext | None = None
+    device: PlaybackDevice | None = None
+
 
 
 from domain.object_values.playback_interactions import PlaybackInteractions

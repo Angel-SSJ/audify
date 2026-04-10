@@ -9,6 +9,11 @@ class CreatePlaylistDTO(BaseModel):
     user_id: str
     track_ids: list[str] = Field(default_factory=list)
     is_public: bool = True
+    followers_count: int = 0
+    cover_image: str = ""
+    tracks: list[TrackEmbeddedPlaylist] = []
+    total_duration_sec: int = 0
+    total_tracks: int = 0
 
 
 class UpdatePlaylistDTO(BaseModel):
@@ -17,6 +22,11 @@ class UpdatePlaylistDTO(BaseModel):
     user_id: str | None = None
     track_ids: list[str] | None = None
     is_public: bool | None = None
+    followers_count: int | None = None
+    cover_image: str | None = None
+    tracks: list[TrackEmbeddedPlaylist] | None = None
+    total_duration_sec: int | None = None
+    total_tracks: int | None = None
 
 
 

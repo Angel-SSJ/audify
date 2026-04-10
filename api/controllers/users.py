@@ -53,7 +53,7 @@ async def delete_user(
 ):
     return await service.delete(user_id)
 
-@router.patch("/{user_id}/restore", response_model=UserResponse,status_code=status.HTTP_200_OK)
+@router.patch("/{user_id}/restore", status_code=status.HTTP_200_OK)
 async def restore_user(
     user_id: str,
     service: UsersService = Depends(get_users_pg_service),

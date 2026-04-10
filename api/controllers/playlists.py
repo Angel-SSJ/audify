@@ -15,7 +15,7 @@ async def get_playlists(service: PlaylistsService = Depends(get_playlists_servic
     return await service.find(params=params)
 
 
-@router.get("/{playlist_id}", response_model=Optional[PlaylistResponse],status_code=status.HTTP_200_OK)
+@router.get("/{playlist_id}", response_model=PlaylistResponse,status_code=status.HTTP_200_OK)
 async def get_playlist(playlist_id: str, service: PlaylistsService = Depends(get_playlists_service)):
     return await service.get_by_id(playlist_id)
 
