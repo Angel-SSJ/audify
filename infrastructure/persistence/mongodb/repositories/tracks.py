@@ -12,5 +12,5 @@ class TrackRepository(BaseRepositoryMongo[TrackEntity, TrackMongo]):
             collection_name="tracks",
             mapper=TrackMapper(),
             schema_class=TrackMongo,
+            entity_name="Track"
         )
-

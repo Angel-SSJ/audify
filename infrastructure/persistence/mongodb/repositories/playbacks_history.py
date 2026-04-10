@@ -9,8 +9,8 @@ class PlaybackHistoryRepository(BaseRepositoryMongo[PlaybackHistoryEntity, Playb
     def __init__(self, db: AsyncIOMotorDatabase):
         super().__init__(
             db=db,
-            collection_name="playback_history",
+            collection_name="playback_histories",
             mapper=PlaybackHistoryMapper(),
             schema_class=PlaybackHistory,
+            entity_name="PlaybackHistory"
         )
-

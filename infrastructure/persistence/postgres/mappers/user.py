@@ -13,21 +13,19 @@ class UserSQLMapper(IMapper[UserEntity, UserModel]):
             last_name=persistence_model.last_name,
             user_name=persistence_model.username,
             email=persistence_model.email,
-            hashed_password=persistence_model.hashed_password,
-            role=persistence_model.role,
-            account_type=None, # Update if needed
+            password=persistence_model.hashed_password,
+            account_type="free",
             is_active=persistence_model.is_active
         )
 
     @staticmethod
     def to_persistence(domain_entity: UserEntity) -> dict:
         return {
-            "id": domain_entity.id,
+            "id": str(domain_entity.id),
             "first_name": domain_entity.first_name,
             "last_name": domain_entity.last_name,
             "username": domain_entity.user_name,
             "email": domain_entity.email,
-            "hashed_password": domain_entity.hashed_password,
-            "role": domain_entity.role,
+            "hashed_password": domain_entity.password,
             "is_active": domain_entity.is_active
         }

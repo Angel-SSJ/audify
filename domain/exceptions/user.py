@@ -1,4 +1,5 @@
-from domain.exceptions.base import NotFoundException, AlreadyExistsException, UnauthorizedException, InvalidCredentialsException, NotHavePermissionException, DomainException
+from fastapi import status
+from domain.exceptions.base import NotFoundException, AlreadyExistsException, UnauthorizedException, InvalidCredentialsException, NotHavePermissionException, DomainException, AlreadyDeletedException
 
 class UserNotFoundException(NotFoundException):
     def __init__(self):
@@ -23,3 +24,7 @@ class UserInvalidCredentialsException(InvalidCredentialsException):
 class UserNotActiveException(DomainException):
     def __init__(self, message: str = "User is not active"):
         super().__init__(message)
+
+class UserAlreadyDeletedException(AlreadyDeletedException):
+    def __init__(self):
+        super().__init__("User")

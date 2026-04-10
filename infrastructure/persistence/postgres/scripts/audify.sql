@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS users (
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
     username VARCHAR(255) NOT NULL UNIQUE,
+    hashed_password VARCHAR(255) NOT NULL,
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -65,12 +66,12 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Usuarios de prueba
-INSERT INTO users (email, password, first_name, last_name, username)
-VALUES ('admin@gmail.com', 'admin@123', 'Admin', 'Admin', 'admin')
+INSERT INTO users (email, hashed_password, first_name, last_name, username)
+VALUES ('admin@gmail.com', encode(digest('admin@123', 'sha256'), 'hex'), 'Admin', 'Admin', 'admin')
 ON CONFLICT (email) DO NOTHING;
 
-INSERT INTO users (email, password, first_name, last_name, username)
-VALUES ('angel@gmail.com', 'angel@123', 'Angel', 'Ramirez', 'angel_ssj')
+INSERT INTO users (email, hashed_password, first_name, last_name, username)
+VALUES ('angel@gmail.com', encode(digest('angel@123', 'sha256'), 'hex'), 'Angel', 'Ramirez', 'angel_ssj')
 ON CONFLICT (email) DO NOTHING;
 
 -- Asignar roles

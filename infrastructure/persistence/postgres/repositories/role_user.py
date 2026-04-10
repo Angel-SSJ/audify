@@ -1,9 +1,9 @@
 from infrastructure.persistence.postgres.repositories.base import BaseRepositoryPostgres
-from infrastructure.persistence.postgres.models.role_user import RoleUserModel
+from infrastructure.persistence.postgres.models.role_user.model import RoleUserModel
 from infrastructure.persistence.postgres.mappers.role_user import RoleUserSQLMapper
 from domain.entities.role_user import RoleUserEntity
 from domain.interfaces.repositories import IRoleUserRepository
-from domain.exceptions.domain import DomainException
+from domain.exceptions.base import DomainException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 

@@ -17,7 +17,7 @@ class IBaseRepository(ABC, Generic[E]):
         pass
 
     @abstractmethod
-    async def get_by_id(self, id: str) -> Optional[E]:
+    async def get_by_id(self, id: str, is_active: bool = True) -> Optional[E]:
         pass
 
     @abstractmethod
@@ -32,8 +32,28 @@ class IBaseRepository(ABC, Generic[E]):
     async def delete(self, id: str) -> bool:
         pass
 
+    @abstractmethod
+    async def restore(self, id: str) -> bool:
+        pass
+
 class IUsersRepository(IBaseRepository[UserEntity]):
-    pass
+    @abstractmethod
+    async def create(self, domain_entity: UserEntity) -> UserEntity:
+        pass
+    @abstractmethod
+    async def update(self, id: str, entity: Optional[UserEntity]) -> Optional[UserEntity]:
+        pass
+    @abstractmethod
+    async def delete(self, id: str) -> bool:
+        pass
+    @abstractmethod
+    async def get_by_email(self, email: str) -> Optional[UserEntity]:
+        pass
+
+    @abstractmethod
+    async def valid_password(self, user_id: str, password: str) -> bool:
+        pass
+
 
 class IPlaylistsRepository(IBaseRepository[PlaylistEntity]):
     pass
@@ -50,28 +70,34 @@ class IArtistsRepository(IBaseRepository[ArtistEntity]):
 class IPlaybackHistoryRepository(IBaseRepository[PlaybackHistoryEntity]):
     pass
 
-
-class IUserRepositorySQL(ABC):
+class IBaseRepositoryPostgres(ABC, Generic[E]):
 
     @abstractmethod
-    async def get_by_id(self, user_id: str) -> Optional[UserEntity]:
+    async def get_by_id(self, id: str) -> Optional[E]:
+        pass
+    @abstractmethod
+    async def create(self, domain_entity: E) -> E:
         pass
 
+
+
+    @abstractmethod
+    async def update(self, id: str, entity: Optional[E]) -> Optional[E]:
+        pass
+
+    @abstractmethod
+    async def delete(self, id: str) -> bool:
+        pass
+
+class IUsersRepositoryPostgres(IBaseRepositoryPostgres[UserEntity]):
     @abstractmethod
     async def get_by_email(self, email: str) -> Optional[UserEntity]:
         pass
-
     @abstractmethod
-    async def create(self, user: UserEntity) -> UserEntity:
+    async def valid_password(self, user_id: str, password: str) -> bool:
         pass
 
-    @abstractmethod
-    async def update(self, user_id: str, user: UserEntity) -> UserEntity:
-        pass
 
-    @abstractmethod
-    async def delete(self, user_id: str) -> bool:
-        pass
 
 class IRoleRepository(ABC):
     @abstractmethod
@@ -117,14 +143,4 @@ class IRoleUserRepository(ABC):
 
     @abstractmethod
     async def delete(self, id: str) -> bool:
-        pass
-
-
-class IUserRepositoryPostgres(IUsersRepository):
-
-    @abstractmethod
-    def _hash_password(self, password: str) -> str:
-        pass
-    @abstractmethod
-    async def valid_password(self, user_id: str, password: str) -> bool:
         pass

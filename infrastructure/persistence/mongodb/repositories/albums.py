@@ -12,5 +12,6 @@ class AlbumsRepository(BaseRepositoryMongo[AlbumEntity, Album]):
             collection_name="albums",
             mapper=AlbumMapper(),
             schema_class=Album,
+            entity_name="Album"
         )
 

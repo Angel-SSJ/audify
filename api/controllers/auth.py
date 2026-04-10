@@ -9,7 +9,7 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 @router.post("/login", response_model=TokenDTO)
 async def login(data: LoginDTO, auth_service: AuthenticationService = Depends(get_auth_service)):
-    token = await auth_service.login(data.email, data.password, data.user_id, data.user_name, data.role)
+    token = await auth_service.login(data.email, data.password)
     return TokenDTO(access_token=token)
 
 @router.post("/register", status_code=status.HTTP_201_CREATED)
@@ -19,7 +19,7 @@ async def register(data: RegisterDTO, auth_service: AuthenticationService = Depe
         last_name=data.last_name,
         user_name=data.user_name,
         email=data.email,
-        hashed_password=data.password,
+        password=data.password,
         role=data.role,
         account_type="free",
     )

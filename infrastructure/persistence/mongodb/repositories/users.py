@@ -1,13 +1,19 @@
+from datetime import datetime
+from typing import Optional
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from domain.entities.user import UserEntity
 from infrastructure.persistence.mongodb.models.user.model import User
 from infrastructure.persistence.mongodb.mappers.user import UserMapper
 from infrastructure.persistence.mongodb.repositories.base import BaseRepositoryMongo
+from api.helpers.object_id import ObjectID
 
 
-class UserRepository(BaseRepositoryMongo[UserEntity, User]):
+from domain.interfaces.repositories import IUsersRepository
+import hashlib
+
+class UserRepository(BaseRepositoryMongo[UserEntity, User], IUsersRepository):
     def __init__(self, db: AsyncIOMotorDatabase):
-        super().__init__(db=db, collection_name="users", mapper=UserMapper(), schema_class=User)
+        super().__init__(db=db, collection_name="users", mapper=UserMapper(), schema_class=User, entity_name="User")
 
 
     async def create(self,entity:UserEntity)->UserEntity:
@@ -41,3 +47,13 @@ class UserRepository(BaseRepositoryMongo[UserEntity, User]):
             {"$set": data},
         )
         return result.modified_count > 0
+    async def get_by_email(self, email: str) -> Optional[UserEntity]:
+        doc = await self.collection.find_one({"email": email})
+        return self._to_entity(doc) if doc else None
+
+    async def valid_password(self, user_id: str, password: str) -> bool:
+        user = await self.get_by_id(user_id)
+        if not user:
+            return False
+        hashed_password = hashlib.sha256(password.encode()).hexdigest()
+        return user.password == hashed_password

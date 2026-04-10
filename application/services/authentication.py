@@ -3,10 +3,15 @@ from application.services.users import UsersService
 from domain.entities.user import UserEntity
 from datetime import datetime
 from domain.exceptions.base import UnauthorizedException
-from domain.interfaces.repositories import IRoleUserRepository, IUserRepositoryPostgres
+from domain.interfaces.repositories import IRoleUserRepository, IUsersRepositoryPostgres, IRoleRepository
 
 class AuthenticationService:
-    def __init__(self, jwt_service: IJWTService, users_service: UsersService,role_user_repository:IRoleUserRepository, user_repository_sql:IUserRepositoryPostgres, role_repository:IRoleRepository):
+    def __init__(self,
+                 jwt_service: IJWTService,
+                 users_service: UsersService,
+                 role_user_repository: IRoleUserRepository,
+                 user_repository_sql: IUsersRepositoryPostgres,
+                 role_repository: IRoleRepository):
         self.jwt_service = jwt_service
         self.users_service = users_service
         self.user_repository_sql=user_repository_sql
@@ -45,7 +50,8 @@ class AuthenticationService:
             role=role.name,
             exp=current_date
         )
-        return self.jwt_service.create_access_token(token_data)
+        return {"access_token":self.jwt_service.create_access_token(token_data)}
+
 
     async def register(self, user_entity: UserEntity) -> UserEntity:
         return await self.users_service.create(user_entity)

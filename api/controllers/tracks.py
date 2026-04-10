@@ -11,17 +11,14 @@ router = APIRouter(prefix="/tracks", tags=["tracks"])
 
 
 
-@router.post("/find/", response_model=List[TrackResponse])
+@router.post("/find/", response_model=List[TrackResponse],status_code=status.HTTP_200_OK)
 async def get_tracks(service: TracksService = Depends(get_tracks_service), params: QueryParams = None):
     return await service.find(params=params)
 
 
-@router.get("/{track_id}", response_model=TrackResponse)
+@router.get("/{track_id}", response_model=Optional[TrackResponse],status_code=status.HTTP_200_OK)
 async def get_track(track_id: str, service: TracksService = Depends(get_tracks_service)):
-    track = await service.get_by_id(track_id)
-    if not track:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Track not found")
-    return track
+    return await service.get_by_id(track_id)
 
 
 @router.post("/", response_model=TrackResponse, status_code=status.HTTP_201_CREATED)
@@ -29,20 +26,18 @@ async def create_track(track: CreateTrackDTO, service: TracksService = Depends(g
     return await service.create(track)
 
 
-@router.put("/{track_id}", response_model=TrackResponse)
+@router.patch("/{track_id}", response_model=TrackResponse,status_code=status.HTTP_200_OK)
 async def update_track(
     track_id: str,
-    track: Optional[UpdateTrackDTO],
+    track: UpdateTrackDTO,
     service: TracksService = Depends(get_tracks_service),
 ):
-    updated = await service.update(track_id, track)
-    if not updated:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Track not found")
-    return updated
+    return await service.update(track_id, track)
 
-
-@router.delete("/{track_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{track_id}", status_code=status.HTTP_200_OK)
 async def delete_track(track_id: str, service: TracksService = Depends(get_tracks_service)):
-    deleted = await service.delete(track_id)
-    if not deleted:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Track not found")
+    return await service.delete(track_id)
+
+@router.patch("/{track_id}/restore",status_code=status.HTTP_200_OK)
+async def restore_track(track_id: str, service: TracksService = Depends(get_tracks_service)):
+    return await service.restore(track_id)

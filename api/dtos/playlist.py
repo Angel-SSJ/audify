@@ -1,5 +1,7 @@
 from pydantic import BaseModel, Field
 from typing import Optional
+from domain.object_values.track_embeddings import TrackEmbeddedPlaylist
+
 
 class CreatePlaylistDTO(BaseModel):
     name: str
@@ -17,6 +19,7 @@ class UpdatePlaylistDTO(BaseModel):
     is_public: bool | None = None
 
 
+
 class PlaylistResponse(BaseModel):
     id: str
     name: str
@@ -25,7 +28,7 @@ class PlaylistResponse(BaseModel):
     is_public: bool = True
     followers_count: int = 0
     cover_image: str = ""
-    tracks: list[dict] = []
+    tracks: list[TrackEmbeddedPlaylist] = []
     total_duration_sec: int = 0
     total_tracks: int = 0
 

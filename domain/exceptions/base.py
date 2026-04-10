@@ -1,20 +1,22 @@
 from fastapi import status
 
 class DomainException(Exception):
-    def __init__(self, message: str):
+    def __init__(self, message: str, status_code: int = status.HTTP_400_BAD_REQUEST):
         self.message = message
-        self.status_code = status.HTTP_400_BAD_REQUEST
+        self.status_code = status_code
         super().__init__(self.message)
 
 class NotFoundException(DomainException):
     def __init__(self, entity_name: str):
-        self.status_code = status.HTTP_404_NOT_FOUND
-        super().__init__(f"{entity_name} not found")
+        super().__init__(f"{entity_name} not found", status.HTTP_404_NOT_FOUND)
 
 class AlreadyExistsException(DomainException):
     def __init__(self, entity_name: str):
-        self.status_code = status.HTTP_409_CONFLICT
-        super().__init__(f"{entity_name} already exists")
+        super().__init__(f"{entity_name} already exists", status.HTTP_409_CONFLICT)
+
+class AlreadyDeletedException(DomainException):
+    def __init__(self, entity_name: str):
+        super().__init__(f"{entity_name} already deleted", status.HTTP_400_BAD_REQUEST)
 
 
 

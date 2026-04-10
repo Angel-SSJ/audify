@@ -1,3 +1,6 @@
+from domain.interfaces.mapper import IMapper
+from infrastructure.persistence.postgres.models.role_user.model import RoleUserModel
+from domain.entities.role_user import RoleUserEntity
 
 class RoleUserSQLMapper(IMapper[RoleUserEntity, RoleUserModel]):
     def to_domain(self, model: RoleUserModel) -> RoleUserEntity:
@@ -15,6 +18,7 @@ class RoleUserSQLMapper(IMapper[RoleUserEntity, RoleUserModel]):
             id=entity.id,
             user_id=entity.user_id,
             role_id=entity.role_id,
+
             created_at=entity.created_at,
             updated_at=entity.updated_at,
             is_active=entity.is_active

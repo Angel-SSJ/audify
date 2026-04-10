@@ -21,6 +21,10 @@ class UpdatePlaybackHistoryDTO(BaseModel):
     country_code: str | None = None
 
 
+from domain.object_values.playback_interactions import PlaybackInteractions
+from domain.object_values.playback_context import PlaybackContext
+from domain.object_values.playback_device import PlaybackDevice
+
 class PlaybackHistoryResponse(BaseModel):
     id: str
     user_id: str
@@ -29,9 +33,9 @@ class PlaybackHistoryResponse(BaseModel):
     progress_ms: int
     track_duration_ms: int = 0
     percent_played: float = 0.0
-    interactions: dict | None = None
-    context: dict | None = None
-    device: dict | None = None
+    interactions: PlaybackInteractions | None = None
+    context: PlaybackContext | None = None
+    device: PlaybackDevice | None = None
     country_code: str
 
     class Config:

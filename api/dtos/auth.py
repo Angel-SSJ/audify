@@ -3,9 +3,6 @@ from pydantic import BaseModel, EmailStr
 class LoginDTO(BaseModel):
     email: EmailStr
     password: str
-    user_id: str
-    user_name: str
-    role: str
 
 class RegisterDTO(BaseModel):
     first_name: str

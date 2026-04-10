@@ -26,12 +26,30 @@ class PlaylistMapper(IMapper[PlaylistEntity, Playlist]):
         )
 
     @staticmethod
-    def to_persistence(domain_entity: PlaylistEntity) -> dict:
-        data = domain_entity.model_dump(exclude={"id"})
-        if domain_entity.id:
-            data["_id"] = ObjectID(domain_entity.id)
-            
-        if domain_entity.owner_id:
-            data["owner_id"] = ObjectID(domain_entity.owner_id)
-            
+    def to_persistence(domain_entity: any) -> dict:
+        if hasattr(domain_entity, "model_dump"):
+            data = domain_entity.model_dump(exclude={"id"}, exclude_none=True)
+        elif hasattr(domain_entity, "copy"):
+            data = domain_entity.copy()
+        else:
+            data = dict(domain_entity)
+
+        entity_id = getattr(domain_entity, "id", None)
+        if entity_id:
+            data["_id"] = ObjectID(entity_id)
+
+        owner_id = getattr(domain_entity, "owner_id", None)
+        if owner_id:
+            data["owner_id"] = ObjectID(owner_id)
+
+        if hasattr(domain_entity, "tracks") and domain_entity.tracks:
+            data["tracks"] = []
+            for track in domain_entity.tracks:
+                track_data = track.model_dump() if hasattr(track, "model_dump") else track
+                if isinstance(track_data, dict):
+                    track_id = track_data.get("track_id")
+                    if track_id:
+                        track_data["track_id"] = ObjectID(track_id)
+                data["tracks"].append(track_data)
+
         return data

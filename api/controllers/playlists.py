@@ -10,17 +10,14 @@ router = APIRouter(prefix="/playlists", tags=["playlists"])
 
 
 
-@router.post("/find/", response_model=List[PlaylistResponse])
+@router.post("/find/", response_model=List[PlaylistResponse],status_code=status.HTTP_200_OK)
 async def get_playlists(service: PlaylistsService = Depends(get_playlists_service), params: QueryParams = None):
     return await service.find(params=params)
 
 
-@router.get("/{playlist_id}", response_model=PlaylistResponse)
+@router.get("/{playlist_id}", response_model=Optional[PlaylistResponse],status_code=status.HTTP_200_OK)
 async def get_playlist(playlist_id: str, service: PlaylistsService = Depends(get_playlists_service)):
-    playlist = await service.get_by_id(playlist_id)
-    if not playlist:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Playlist not found")
-    return playlist
+    return await service.get_by_id(playlist_id)
 
 
 @router.post("/", response_model=PlaylistResponse, status_code=status.HTTP_201_CREATED)
@@ -28,20 +25,20 @@ async def create_playlist(playlist: CreatePlaylistDTO, service: PlaylistsService
     return await service.create(playlist)
 
 
-@router.put("/{playlist_id}", response_model=PlaylistResponse)
+@router.patch("/{playlist_id}", response_model=PlaylistResponse,status_code=status.HTTP_200_OK)
 async def update_playlist(
     playlist_id: str,
     playlist: Optional[UpdatePlaylistDTO],
     service: PlaylistsService = Depends(get_playlists_service),
 ):
-    updated = await service.update(playlist_id, playlist)
-    if not updated:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Playlist not found")
-    return updated
+    return await service.update(playlist_id, playlist)
+
 
 
 @router.delete("/{playlist_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_playlist(playlist_id: str, service: PlaylistsService = Depends(get_playlists_service)):
-    deleted = await service.delete(playlist_id)
-    if not deleted:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Playlist not found")
+    return await service.delete(playlist_id)
+
+@router.patch("/{playlist_id}/restore", status_code=status.HTTP_200_OK)
+async def restore_playlist(playlist_id: str, service: PlaylistsService = Depends(get_playlists_service)):
+    return await service.restore(playlist_id)

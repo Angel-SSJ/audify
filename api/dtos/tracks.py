@@ -1,6 +1,9 @@
 from datetime import datetime
 from typing import List, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+from domain.abstractions.enums import MusicalGenre
+from domain.object_values.video_assets import VideoAsset
+
 
 class ArtistEmbeddedResponse(BaseModel):
     artist_id: str
@@ -15,24 +18,29 @@ class VideoAssetResponse(BaseModel):
 
 class CreateTrackDTO(BaseModel):
     title: str
-    duration_ms: int
+    duration_sec: int
+    file_url: str = ''
+    track_number: int
+    genres: list[MusicalGenre] = Field(default_factory=list)
+    artists: list[ArtistEmbeddedResponse] = Field(default_factory=list)
     album_id: str
-    artist_id: str
-    genre_id: str | None = None
-    track_number: int = 0
-    is_explicit: bool = False
-    play_count: int = 0
+    album_name:str
+    video_assets: VideoAsset | None = None
+    cover_image: str = ''
+
 
 
 class UpdateTrackDTO(BaseModel):
-    title: str | None = None
-    duration_ms: int | None = None
-    album_id: str | None = None
-    artist_id: str | None = None
-    genre_id: str | None = None
-    track_number: int | None = None
-    is_explicit: bool | None = None
-    play_count: int | None = None
+    title: str
+    duration_sec: int
+    file_url: str = ''
+    track_number: int
+    genres: list[MusicalGenre] = Field(default_factory=list)
+    artists: list[ArtistEmbeddedResponse] = Field(default_factory=list)
+    album_id: str
+    album_name:str
+    video_assets: VideoAsset | None = None
+    cover_image: str = ''
 
 
 class TrackResponse(BaseModel):

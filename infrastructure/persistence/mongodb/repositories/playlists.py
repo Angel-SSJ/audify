@@ -12,5 +12,6 @@ class PlaylistRepository(BaseRepositoryMongo[PlaylistEntity, Playlist]):
             collection_name="playlists",
             mapper=PlaylistMapper(),
             schema_class=Playlist,
+            entity_name="Playlist"
         )
 

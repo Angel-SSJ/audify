@@ -18,8 +18,16 @@ class UserMapper(IMapper[UserEntity, User]):
         )
 
     @staticmethod
-    def to_persistence(domain_entity: UserEntity) -> dict:
-        data = domain_entity.model_dump(exclude={"id"})
-        if domain_entity.id:
-            data["_id"] = ObjectID(domain_entity.id)
+    def to_persistence(domain_entity: any) -> dict:
+        if hasattr(domain_entity, "model_dump"):
+            data = domain_entity.model_dump(exclude={"id"}, exclude_none=True)
+        elif hasattr(domain_entity, "copy"):
+            data = domain_entity.copy()
+        else:
+            data = dict(domain_entity)
+
+        entity_id = getattr(domain_entity, "id", None)
+        if entity_id:
+            data["_id"] = ObjectID(entity_id)
+
         return data

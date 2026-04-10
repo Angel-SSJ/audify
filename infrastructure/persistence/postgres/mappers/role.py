@@ -1,3 +1,6 @@
+from domain.interfaces.mapper import IMapper
+from infrastructure.persistence.postgres.models.role.model import RoleModel
+from domain.entities.role import RoleEntity
 
 class RoleSQLMapper(IMapper[RoleEntity, RoleModel]):
     def to_domain(self, model: RoleModel) -> RoleEntity:

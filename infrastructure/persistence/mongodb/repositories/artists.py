@@ -12,5 +12,6 @@ class ArtistRepository(BaseRepositoryMongo[ArtistEntity, Artist]):
             collection_name="artists",
             mapper=ArtistMapper(),
             schema_class=Artist,
+            entity_name="Artist"
         )
 

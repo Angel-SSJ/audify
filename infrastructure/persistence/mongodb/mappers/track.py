@@ -29,21 +29,30 @@ class TrackMapper(IMapper[TrackEntity, Track]):
         )
 
     @staticmethod
-    def to_persistence(domain_entity: TrackEntity) -> dict:
-        data = domain_entity.model_dump(exclude={"id"})
-        if domain_entity.id:
-            data["_id"] = ObjectID(domain_entity.id)
+    def to_persistence(domain_entity: any) -> dict:
+        if hasattr(domain_entity, "model_dump"):
+            data = domain_entity.model_dump(exclude={"id"}, exclude_none=True)
+        elif hasattr(domain_entity, "copy"):
+            data = domain_entity.copy()
+        else:
+            data = dict(domain_entity)
 
-        if domain_entity.album_id:
-            data["album_id"] = ObjectID(domain_entity.album_id)
+        entity_id = getattr(domain_entity, "id", None)
+        if entity_id:
+            data["_id"] = ObjectID(entity_id)
 
-        if domain_entity.artists:
-            data["artists"] = [
-                {
-                    "artist_id": ObjectID(artist.artist_id),
-                    "name": artist.name,
-                    "role": artist.role
-                } for artist in domain_entity.artists
-            ]
+        album_id = getattr(domain_entity, "album_id", None)
+        if album_id:
+            data["album_id"] = ObjectID(album_id)
+
+        if hasattr(domain_entity, "artists") and domain_entity.artists:
+            data["artists"] = []
+            for artist in domain_entity.artists:
+                artist_data = artist.model_dump() if hasattr(artist, "model_dump") else artist
+                if isinstance(artist_data, dict):
+                    artist_id = artist_data.get("artist_id")
+                    if artist_id:
+                        artist_data["artist_id"] = ObjectID(artist_id)
+                data["artists"].append(artist_data)
 
         return data

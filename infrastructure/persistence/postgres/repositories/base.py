@@ -1,7 +1,7 @@
 from typing import TypeVar, Generic, Optional, List, Type, Any
 from sqlalchemy import select, update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
-from domain.interfaces.repositories import IBaseRepository
+from domain.interfaces.repositories import IBaseRepositoryPostgres
 from domain.interfaces.mapper import IMapper
 from domain.exceptions.base import NotFoundException
 from datetime import datetime
@@ -9,7 +9,7 @@ from datetime import datetime
 D = TypeVar("D") # Domain Entity
 M = TypeVar("M") # SQL Model
 
-class BaseRepositoryPostgres(Generic[D, M], IBaseRepository[D]):
+class BaseRepositoryPostgres(Generic[D, M], IBaseRepositoryPostgres[D]):
     def __init__(self, session: AsyncSession, model_class: Type[M], mapper: IMapper[D, Any], entity_name: str):
         self.session = session
         self.model_class = model_class

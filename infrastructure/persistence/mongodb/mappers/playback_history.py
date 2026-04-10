@@ -21,14 +21,24 @@ class PlaybackHistoryMapper(IMapper[PlaybackHistoryEntity, PlaybackHistory]):
         )
 
     @staticmethod
-    def to_persistence(domain_entity: PlaybackHistoryEntity) -> dict:
-        data = domain_entity.model_dump(exclude={"id"})
-        if domain_entity.id:
-            data["_id"] = ObjectID(domain_entity.id)
+    def to_persistence(domain_entity: any) -> dict:
+        if hasattr(domain_entity, "model_dump"):
+            data = domain_entity.model_dump(exclude={"id"}, exclude_none=True)
+        elif hasattr(domain_entity, "copy"):
+            data = domain_entity.copy()
+        else:
+            data = dict(domain_entity)
 
-        if domain_entity.user_id:
-            data["user_id"] = ObjectID(domain_entity.user_id)
-        if domain_entity.track_id:
-            data["track_id"] = ObjectID(domain_entity.track_id)
+        entity_id = getattr(domain_entity, "id", None)
+        if entity_id:
+            data["_id"] = ObjectID(entity_id)
+
+        user_id = getattr(domain_entity, "user_id", None)
+        if user_id:
+            data["user_id"] = ObjectID(user_id)
+
+        track_id = getattr(domain_entity, "track_id", None)
+        if track_id:
+            data["track_id"] = ObjectID(track_id)
 
         return data

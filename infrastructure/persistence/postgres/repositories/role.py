@@ -1,10 +1,11 @@
 from infrastructure.persistence.postgres.repositories.base import BaseRepositoryPostgres
-from infrastructure.persistence.postgres.models.role import RoleModel
+from infrastructure.persistence.postgres.models.role.model import RoleModel
 from infrastructure.persistence.postgres.mappers.role import RoleSQLMapper
 from domain.entities.role import RoleEntity
 from domain.interfaces.repositories import IRoleRepository
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from domain.exceptions.base import DomainException
 
 class RoleRepositoryPostgres(BaseRepositoryPostgres[RoleEntity, RoleModel], IRoleRepository):
     def __init__(self, session: AsyncSession):
