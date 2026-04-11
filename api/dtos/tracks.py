@@ -31,16 +31,16 @@ class CreateTrackDTO(BaseModel):
 
 
 class UpdateTrackDTO(BaseModel):
-    title: str
-    duration_sec: int
-    file_url: str = ''
-    track_number: int
-    genres: list[MusicalGenre] = Field(default_factory=list)
-    artists: list[ArtistEmbeddedResponse] = Field(default_factory=list)
-    album_id: str
-    album_name:str
+    title: str | None = None
+    duration_sec: int | None = None
+    file_url: str | None = None
+    track_number: int | None = None
+    genres: list[MusicalGenre] | None = None
+    artists: list[ArtistEmbeddedResponse] | None = None
+    album_id: str | None = None
+    album_name:str | None = None
     video_assets: VideoAsset | None = None
-    cover_image: str = ''
+    cover_image: str | None = None
 
 
 class TrackResponse(BaseModel):

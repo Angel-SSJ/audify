@@ -23,7 +23,7 @@ class PlaybackHistoryMapper(IMapper[PlaybackHistoryEntity, PlaybackHistory]):
     @staticmethod
     def to_persistence(domain_entity: any) -> dict:
         if hasattr(domain_entity, "model_dump"):
-            data = domain_entity.model_dump(exclude={"id"}, exclude_none=True)
+            data = domain_entity.model_dump(exclude={"id"},exclude_unset=True)
         elif hasattr(domain_entity, "copy"):
             data = domain_entity.copy()
         else:
