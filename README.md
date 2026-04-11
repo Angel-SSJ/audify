@@ -143,3 +143,74 @@ async def get_mongo_db() -> AsyncIOMotorDatabase:
     # Siempre reutiliza la misma referencia db.client
     return db.client[settings.mongo_db]
 ```
+
+---
+
+## 4. Guía de Inicialización (Paso a Paso)
+
+Para arrancar el proyecto localmente y poder testear sus Endpoints, sigue diligentemente las instrucciones a continuación:
+
+### Paso 1: Clonar el Repositorio
+```bash
+git clone https://github.com/Angel-SSJ/audify.git
+cd audify
+```
+
+### Paso 2: Crear el Entorno Virtual (Opcional pero recomendado)
+Crea y activa un entorno virtual de Python aislando las dependencias.
+**En Windows:**
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+**En macOS/Linux:**
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### Paso 3: Instalación de Dependencias
+Audify emplea estándares modernos descritos en `pyproject.toml`. Para instalar todas las herramientas subyacentes como `fastapi`, `motor`, `uvicorn` entre otras, ejecuta en la raíz:
+```bash
+pip install -e .
+```
+*(Si no dispones del ejecutor local, asegura de tener Python 3.10+ instalado).*
+
+### Paso 4: Configuración de Variables de Entorno
+Crea un archivo llamado `.env` en la raíz del proyecto. Este archivo será procesado mágicamente por la configuración en `api/config.py`. En él debes proveer las credenciales de tus clusters:
+
+```env
+APP_NAME=AudifyAPI
+DEBUG=True
+
+# Configuraciones MongoDB
+MONGO_USER=tu_usuario
+MONGO_PASSWORD=tu_clave
+MONGO_CLUSTER=tu_cluster.mongodb.net
+MONGO_DB=audify
+MONGO_BASE_CONNECTION_STRING=mongodb+srv://{USER}:{PASSWORD}@{CLUSTER}/?retryWrites=true&w=majority
+
+# Configuraciones PostgreSQL
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=tu_clave
+POSTGRES_HOST=127.0.0.1
+POSTGRES_PORT=5432
+POSTGRES_DB=audify
+POSTGRES_BASE_CONNECTION_STRING=postgresql://{USER}:{PASSWORD}@{HOST}:{PORT}/{NAME}
+
+# Seguridad y Autenticación JWT
+SECRET_KEY=tu_super_secreto_seguro_jwt
+JWT_ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=60
+ACCESS_TOKEN_EXPIRE_HOURS=24
+ACCESS_TOKEN_EXPIRE_DAYS=7
+```
+
+### Paso 5: Lanzamiento del Servidor
+Finalmente arranca el motor del framework Web con su opción recargable si estás trabajando:
+```bash
+fastapi dev api/main.py
+```
+*(Alternativamente puedes usar `uvicorn api.main:app --reload`).*
+
+La aplicación de Audify ahora se encuentra en vivo. Puedes navegar al portal inteligente generado en la ruta `http://127.0.0.1:8000/docs` para visualizar interactivamente la consola de Swagger provista para pruebas.
