@@ -1,3 +1,5 @@
+from domain.entities.role_user import RoleUserEntity
+from domain.entities.role import RoleEntity
 from typing import TypeVar, Generic, Optional, Any, List
 from abc import ABC, abstractmethod
 from pydantic import BaseModel
