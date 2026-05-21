@@ -1,6 +1,8 @@
 from cassandra.cluster import Cluster
+from cassandra import ConsistencyLevel
 
-cluster = Cluster(['127.0.0.1'])
+cluster = Cluster(['localhost'])
+session = cluster.connect('Audify')
 
-session = cluster.connect('spotify_keyspace')
 print("Conectado a Cassandra")
+session.default_consistency_level = ConsistencyLevel.QUORUM
